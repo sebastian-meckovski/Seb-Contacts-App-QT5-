@@ -1,5 +1,6 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QPixmap, QIcon
+from PyQt5.QtCore import Qt
 from PIL import Image
 import sqlite3
 import os
@@ -137,9 +138,8 @@ class Main(QWidget):
 class UpdateEntry(QWidget):
     def __init__(self, main: Main):
         super().__init__()
-
         self.main = main
-
+        self.setWindowModality(Qt.ApplicationModal)
         self.setWindowTitle("Update Contact")
         self.setGeometry(450, 180, 520, 600)
         self.setWindowIcon(QIcon('icons/person.png'))
@@ -269,7 +269,7 @@ class UpdateEntry(QWidget):
 class AddEntry(QWidget):
     def __init__(self, main: Main):
         super().__init__()
-        self.main = main
+        self.setWindowModality(Qt.ApplicationModal)
         self.main = main
         self.setWindowTitle("Add Contacts")
         self.setGeometry(450, 180, 520, 600)
