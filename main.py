@@ -10,6 +10,7 @@ cur = con.cursor()
 defaultImg = "images/person.png"
 person_id = None
 
+
 class Main(QWidget):
     def __init__(self):
         super().__init__()
@@ -60,8 +61,7 @@ class Main(QWidget):
         self.setLayout(self.mainLayout)
 
     def addEntry(self):
-        self.newEntry = AddEntry()
-        self.close()
+        self.newEntry = AddEntry(self)
 
     def getEntry(self):
         query = "SELECT _id, name, surname FROM contacts"
@@ -129,15 +129,17 @@ class Main(QWidget):
         if self.EntryList.selectedItems():
             person = self.EntryList.currentItem().text()
             person_id = person.split("-")[0]
-            self.updateWindows = UpdateEntry()
-            self.close()
+            self.updateWindows = UpdateEntry(self)
         else:
             QMessageBox.information(self, "Warning!", "Please select an entry to update")
 
 
 class UpdateEntry(QWidget):
-    def __init__(self):
+    def __init__(self, main: Main):
         super().__init__()
+
+        self.main = main
+
         self.setWindowTitle("Update Contact")
         self.setGeometry(450, 180, 520, 600)
         self.setWindowIcon(QIcon('icons/person.png'))
@@ -150,7 +152,7 @@ class UpdateEntry(QWidget):
         self.layouts()
 
     def closeEvent(self, event):
-        self.main = Main()
+        self.main.refreshList()
 
     def getPerson(self):
         global person_id
@@ -265,8 +267,10 @@ class UpdateEntry(QWidget):
 
 
 class AddEntry(QWidget):
-    def __init__(self):
+    def __init__(self, main: Main):
         super().__init__()
+        self.main = main
+        self.main = main
         self.setWindowTitle("Add Contacts")
         self.setGeometry(450, 180, 520, 600)
         self.setWindowIcon(QIcon('icons/person.png'))
@@ -278,7 +282,7 @@ class AddEntry(QWidget):
         self.layouts()
 
     def closeEvent(self, event):
-        self.main = Main()
+        self.main.refreshList()
 
     def mainDesign(self):
         # Top Layout Widgets
