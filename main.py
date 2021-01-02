@@ -10,6 +10,7 @@ con = sqlite3.connect('contacts.db')
 cur = con.cursor()
 defaultImg = "images/person.png"
 person_id = None
+selected_index = 0
 
 
 class Main(QWidget):
@@ -79,8 +80,13 @@ class Main(QWidget):
     def displayFirstRecord(self):
         self.EntryList.setCurrentRow(0)
 
+    def displayUpdatedRecord(self):
+        global selected_index
+        self.EntryList.setCurrentRow(selected_index)
+
     def singleClick(self):
         global person_id
+        global selected_index
         for i in reversed(range(self.leftLayout.count())):
             widget = self.leftLayout.takeAt(i).widget()
 
@@ -105,6 +111,8 @@ class Main(QWidget):
         self.leftLayout.addRow("Phone: ", phone)
         self.leftLayout.addRow("Email:", email)
         self.leftLayout.addRow("Address: ", address)
+        selected_index = self.EntryList.currentRow()
+
 
     def deleteEntry(self):
         global person_id
@@ -120,6 +128,7 @@ class Main(QWidget):
                     con.commit()
                     QMessageBox.information(self, "Success!", "Entry was deleted")
                     self.refreshList()
+                    self.displayFirstRecord()
                 except:
                     QMessageBox.information(self, "Warning!", "Entry was not deleted")
         else:
@@ -153,6 +162,7 @@ class UpdateEntry(QWidget):
 
     def closeEvent(self, event):
         self.main.refreshList()
+        self.main.displayUpdatedRecord()
 
     def getPerson(self):
         global person_id
@@ -259,7 +269,6 @@ class UpdateEntry(QWidget):
                 con.commit()
                 QMessageBox.information(self, "Success!", "Entry has been updated")
                 self.close()
-                self.main = Main()
             except Exception as e:
                 QMessageBox.information(self, "Warning!", "Entry has not been updated")
         else:
@@ -287,6 +296,7 @@ class AddEntry(QWidget):
     def mainDesign(self):
         # Top Layout Widgets
         global defaultImg
+        defaultImg = "images/person.png"
         self.setStyleSheet("background-color: white; font-size:12pt;font-family:Arial")
         self.title = QLabel("Add Person")
         self.title.setStyleSheet('font-size: 25pt; font-family:Arial Bold')
