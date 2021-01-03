@@ -161,6 +161,7 @@ class UpdateEntry(QWidget):
         self.layouts()
 
     def closeEvent(self, event):
+        global defaultImg
         self.main.refreshList()
         self.main.displayUpdatedRecord()
 
@@ -246,7 +247,7 @@ class UpdateEntry(QWidget):
             defaultImg = self.fileName
             img = Image.open(defaultImg)
             img = img.resize(size)
-            defaultImg = "images/" + os.path.basename(defaultImg)
+            defaultImg = "images/" + os.path.basename(self.fileName)
             img.save(defaultImg)
             self.imgAdd.setPixmap(QPixmap(defaultImg))
 
